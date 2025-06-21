@@ -1,5 +1,23 @@
 import { useState } from "react";
 import { useTheme } from "../context/ThemeContext";
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  closestCorners,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
+import Todo from "./components/Todo";
 
 const dummyTodos = [
   {
@@ -65,7 +83,7 @@ function App() {
       alert("enter your task");
       return;
     }
-    setTodos([
+    setTodos((todos) => [
       ...todos,
       { id: todos.length + 1, title: inputTodo, completed: false },
     ]);
@@ -94,6 +112,30 @@ function App() {
     setTodos(clear);
     setFilteredTodo([]);
   };
+
+  const getTodoPosition = (id: string | undefined) =>
+    todos.findIndex((todo) => todo.id.toString() === id);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id === over?.id) return;
+
+    setTodos((todos) => {
+      const originalPosition = getTodoPosition(active.id.toString());
+      const newPosition = getTodoPosition(over?.id.toString());
+
+      return arrayMove(todos, originalPosition, newPosition);
+    });
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const displayTodos = filter === "all" ? todos : filterdTodo;
   const itemsLeft = todos.filter((t) => !t.completed);
@@ -160,53 +202,38 @@ function App() {
             onKeyDown={(e) => e.key === "Enter" && handleClick()}
           />
         </div>
+
         <div className="todo__content">
           {todos.length ? (
             <>
-              <div className="todo__container">
-                <div className="todo__all-list">
-                  {displayTodos.length ? (
-                    displayTodos.map((todo) => (
-                      <div
-                        className={`todo__list ${
-                          todo.completed ? "todo__list--completed" : ""
-                        }`}
-                        key={todo.id}
-                      >
-                        <div
-                          className={`todo__circle ${
-                            todo.completed ? "todo__circle--completed" : ""
-                          }`}
-                          onClick={() => handleCompleted(todo.id)}
+              <DndContext
+                collisionDetection={closestCorners}
+                onDragEnd={handleDragEnd}
+                sensors={sensors}
+              >
+                <div className="todo__container">
+                  <div className="todo__all-list">
+                    {displayTodos.length ? (
+                      displayTodos.map((todo) => (
+                        <SortableContext
+                          items={displayTodos}
+                          strategy={verticalListSortingStrategy}
                         >
-                          <div
-                            className={`todo__circle-inner ${
-                              todo.completed
-                                ? "todo__circle-inner--completed"
-                                : ""
-                            }`}
-                          >
-                            {todo.completed && (
-                              <img src="/img/icon-check.svg" alt="check" />
-                            )}
-                          </div>
-                        </div>
-                        <p>{todo.title}</p>
-                        <img
-                          src="/img/icon-cross.svg"
-                          className="todo__list--cancel"
-                          alt="cancel"
-                          onClick={() => handleDelete(todo.id)}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <p className="todo__empty">
-                      No todo in your current filter
-                    </p>
-                  )}
+                          <Todo
+                            todo={todo}
+                            completed={() => handleCompleted(todo.id)}
+                            deleteTodo={() => handleDelete(todo.id)}
+                          />
+                        </SortableContext>
+                      ))
+                    ) : (
+                      <p className="todo__empty">
+                        No todo in your current filter
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </DndContext>
               <div className="todo__footer">
                 <p>{itemsLeft.length} item(s) left</p>
                 <div className="todo__filter">

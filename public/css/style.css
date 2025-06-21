@@ -285,6 +285,7 @@ body {
   border-bottom: 1px solid var(--completed-text);
   padding: 2.4rem;
   cursor: pointer;
+  touch-action: none;
 }
 .todo__list p {
   flex: 1;
