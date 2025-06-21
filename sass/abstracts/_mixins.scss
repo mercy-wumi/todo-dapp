@@ -1,0 +1,19 @@
+@mixin placeholder {
+    background-color: var(--placeholder-bg) !important;
+    color: transparent !important;
+  
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: anim-placeholder;
+    animation-timing-function: ease-in-out;
+  
+    & * {
+      color: transparent !important;
+    }
+  }
+  
+  @mixin placeholder-dark {
+    background-color: var(--placeholder-dark-bg) !important;
+  }
+  

@@ -1,0 +1,32 @@
+html {
+    font-size: 50%;
+  
+    @media (min-width: 1650px) {
+      font-size: 62.5%;
+    }
+  
+    @media (min-width: 1500px) {
+      font-size: 58%;
+    }
+  
+    @media (min-width: 1400px) {
+      font-size: 55%;
+    }
+  
+    @media (max-width: 600px) {
+      font-size: 45%;
+    }
+  
+    @media (max-width: 360px) {
+      font-size: 40%;
+    }
+  }
+  
+  body {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    font-weight: 400;
+    font-family: "Lato", sans-serif;
+    line-height: 1.5;
+    color: var(--);
+  }

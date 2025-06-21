@@ -1,0 +1,91 @@
+@use "sass:map";
+
+$light-theme: (
+  light: block,
+  dark: none,
+);
+
+$dark-theme: (
+  light: none,
+  dark: block,
+);
+
+$body-bg: (
+  light: hsl(0, 0%, 98%),
+  dark: hsl(235, 21%, 11%),
+);
+
+$text-color: (
+  light: hsl(235, 19%, 35%),
+  dark: hsl(234, 39%, 85%),
+);
+
+$very-dark-grayish-blue: (
+  light: hsl(236, 33%, 92%),
+  dark: hsl(233, 14%, 35%),
+);
+
+$shadow-color: (
+  light: hsl(236, 33%, 92%),
+  dark: hsl(235, 24%, 19%),
+);
+
+$border-bottom: (
+  light: hsl(236, 33%, 92%),
+  dark: hsl(233, 14%, 35%),
+);
+
+$input-container-bg: (
+  light: hsl(0, 0%, 98%),
+  dark: hsl(235, 24%, 19%),
+);
+
+$footer-text: (
+  light: hsl(236, 9%, 61%),
+  dark: hsl(234, 11%, 52%),
+);
+
+$footer-text-hover: (
+  light: hsl(235, 21%, 11%),
+  dark: hsl(236, 33%, 92%),
+);
+
+$completed-text: (
+  light: hsl(233, 11%, 84%),
+  dark: hsl(233, 14%, 35%),
+);
+
+$default: light;
+
+:root {
+  &,
+  &.light-mode {
+    --light-theme: #{map.get($light-theme, $default)};
+    --dark-theme: #{map.get($dark-theme, $default)};
+
+    --body-bg: #{map.get($body-bg, $default)};
+    --text-color: #{map.get($text-color, $default)};
+    --input-container-bg: #{map-get($input-container-bg, $default)};
+    --very-dark-grayish-blue: #{map-get($very-dark-grayish-blue, $default)};
+    --shadow-color: #{map-get($shadow-color, $default)};
+    --border-bottom: #{map-get($border-bottom, $default)};
+    --footer-text: #{map-get($footer-text, $default)};
+    --footer-text-hover: #{map-get($footer-text-hover, $default)};
+    --completed-text: #{map-get($completed-text, $default)};
+  }
+
+  &.dark-mode {
+    --light-theme: #{map.get($light-theme, "dark")};
+    --dark-theme: #{map.get($dark-theme, "dark")};
+
+    --body-bg: #{map.get($body-bg, "dark")};
+    --text-color: #{map.get($text-color, "dark")};
+    --input-container-bg: #{map-get($input-container-bg, "dark")};
+    --very-dark-grayish-blue: #{map-get($very-dark-grayish-blue, "dark")};
+    --shadow-color: #{map-get($shadow-color, "dark")};
+    --border-bottom: #{map-get($border-bottom, "dark")};
+    --footer-text: #{map-get($footer-text, "dark")};
+    --footer-text-hover: #{map-get($footer-text-hover, "dark")};
+    --completed-text: #{map-get($completed-text, "dark")};
+  }
+}
